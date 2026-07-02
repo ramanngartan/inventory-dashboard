@@ -3,6 +3,8 @@ import User from "../models/User.js";
 
 import bcrypt from 'bcrypt';
 
+import jwt from 'jsonwebtoken';
+
 export async function register(req, res) {
 
     if (
@@ -45,6 +47,51 @@ export async function register(req, res) {
         console.log(error);
 
         return res.status(500).json("Internal Server Error")
+
+    }
+
+}
+
+
+export async function login(req, res) {
+
+    if (!req.body.email || !req.body.password) {
+        return res.status(400).json("All fields are required");
+    }
+
+    try {
+        
+        const existingUser = await User.findOne({
+            email : req.body.email
+        })
+
+        if (existingUser === null) return res.status(401).json("Invalid Credentials");
+
+        const isMatch = await bcrypt.compare(
+            req.body.password,
+            existingUser.password
+        )
+
+        if (!isMatch) return res.status(401).json("Invalid Credentials");
+
+        const token = jwt.sign(
+            {
+                userId : existingUser._id
+            },
+            process.env.JWT_SECRET
+        )
+
+        console.log(token);
+
+        res.json(token);
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+        res.status(500).json("Internal Error Occured")
 
     }
 
