@@ -96,3 +96,13 @@ export async function login(req, res) {
     }
 
 }
+
+export async function profile(req, res) {
+
+    const user = await User.findById(
+        req.user.userId
+    ).select("name email role -_id")
+
+    res.json(user);
+
+}
