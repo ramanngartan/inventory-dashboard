@@ -55,6 +55,8 @@ export async function register(req, res) {
 
 export async function login(req, res) {
 
+    console.log("Request Body:", req.body);
+
     if (!req.body.email || !req.body.password) {
         return res.status(400).json("All fields are required");
     }
@@ -65,12 +67,16 @@ export async function login(req, res) {
             email : req.body.email
         })
 
+        console.log("User Found:", existingUser);
+
         if (existingUser === null) return res.status(401).json("Invalid Credentials");
 
         const isMatch = await bcrypt.compare(
             req.body.password,
             existingUser.password
         )
+
+        console.log("Password Match:", isMatch);
 
         if (!isMatch) return res.status(401).json("Invalid Credentials");
 

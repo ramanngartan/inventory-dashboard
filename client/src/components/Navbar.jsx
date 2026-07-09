@@ -1,6 +1,15 @@
+
 import { Bell, Search, UserCircle2 } from "lucide-react";
 
+import { useContext } from "react";
+import AuthContext from "../contexts/AuthContext.jsx"
+
+
+
 export default function Navbar() {
+
+  const { user } = useContext(AuthContext);
+
   return (
     <header className="h-16 bg-slate-50 border-b border-slate-200 flex items-center justify-between px-8">
 
@@ -35,7 +44,7 @@ export default function Navbar() {
           />
 
           <span className="font-medium">
-            Guest
+            {user?.name || "Guest"}
           </span>
 
         </div>

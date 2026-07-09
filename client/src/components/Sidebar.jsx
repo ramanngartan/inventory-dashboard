@@ -8,7 +8,16 @@ import {
 
 import { NavLink } from "react-router-dom";
 
+import { use, useContext } from "react";
+import AuthContext from "../contexts/AuthContext.jsx"
+
+
+
 export default function Sidebar() {
+
+  const { user } = useContext(AuthContext);
+
+
   return (
     <aside className="w-72 bg-slate-900 text-white flex flex-col justify-between">
 
@@ -71,8 +80,8 @@ export default function Sidebar() {
       </div>
 
       <div className="border-t border-slate-800 p-6">
-        <p className="font-semibold">Guest</p>
-        <p className="text-sm text-slate-400">Admin</p>
+        <p className="font-semibold">{user?.name || "Guest"}</p>
+        <p className="text-sm text-slate-400">{user?.role || ""}</p>
       </div>
 
     </aside>
