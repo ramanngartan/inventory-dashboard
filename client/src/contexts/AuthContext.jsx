@@ -14,8 +14,6 @@ export function AuthProvider({ children }){
 
     async function fetchProfile(){
 
-        console.log("Fetching profile...")
-
         try {
 
             const token = localStorage.getItem("token");
