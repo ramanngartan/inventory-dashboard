@@ -91,7 +91,7 @@ export default function Products() {
                             setSelectedProduct(null)
                         }}
                     >
-                        + Add Product
+                        Add Product
                     </button>
 
                     
