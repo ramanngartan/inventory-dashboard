@@ -20,7 +20,9 @@ export default function Products() {
     const [selectedProduct, setSelectedProduct] = useState(null);
 
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("All")
+    const [selectedCategory, setSelectedCategory] = useState("All");
+
+    const [sortBy, setSortBy] = useState("newest");
 
 
     async function fetchProducts() {
@@ -84,6 +86,54 @@ export default function Products() {
         return matchesSearch && matchesCategory;
 
     });
+
+    const sortedProducts = [...filteredProducts];
+
+    switch (sortBy) {
+
+        case "name-asc":
+            sortedProducts.sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
+            break;
+
+        case "name-desc":
+            sortedProducts.sort((a, b) =>
+                b.name.localeCompare(a.name)
+            );
+            break;
+
+        case "price-asc":
+            sortedProducts.sort((a, b) => a.price - b.price);
+            break;
+
+        case "price-desc":
+            sortedProducts.sort((a, b) => b.price - a.price);
+            break;
+
+        case "stock-asc":
+            sortedProducts.sort((a, b) => a.stock - b.stock);
+            break;
+
+        case "stock-desc":
+            sortedProducts.sort((a, b) => b.stock - a.stock);
+            break;
+
+        case "newest":
+            sortedProducts.sort(
+                (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
+            break;
+
+        case "oldest":
+            sortedProducts.sort(
+                (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            );
+            break;
+
+        default:
+            break;
+    }
 
     const categories = [
         "All",
@@ -152,6 +202,30 @@ export default function Products() {
 
                     </select>
 
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="border border-slate-300 rounded-xl px-4 py-3 bg-white outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+
+                        <option value="newest">Newest</option>
+
+                        <option value="oldest">Oldest</option>
+
+                        <option value="name-asc">Name (A-Z)</option>
+
+                        <option value="name-desc">Name (Z-A)</option>
+
+                        <option value="price-asc">Price (Low → High)</option>
+
+                        <option value="price-desc">Price (High → Low)</option>
+
+                        <option value="stock-asc">Stock (Low → High)</option>
+
+                        <option value="stock-desc">Stock (High → Low)</option>
+
+                    </select>
+
                 </div>
 
 
@@ -187,7 +261,7 @@ export default function Products() {
 
                         ) : (
 
-                            filteredProducts.map((product) => (
+                            sortedProducts.map((product) => (
 
                                 <tr
                                     key={product._id}
