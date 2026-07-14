@@ -6,6 +6,7 @@ import cors from 'cors'
 
 import productRoutes from './routes/productRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(cors());
 
 app.use("/products", productRoutes);
 app.use("/auth", authRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 
 const PORT = process.env.PORT;
