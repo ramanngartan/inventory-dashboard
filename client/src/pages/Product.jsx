@@ -19,6 +19,8 @@ export default function Products() {
 
     const [selectedProduct, setSelectedProduct] = useState(null);
 
+    const [searchTerm, setSearchTerm] = useState("");
+
 
     async function fetchProducts() {
 
@@ -41,10 +43,6 @@ export default function Products() {
 
     }
 
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
     async function handleDelete() {
         
         try {
@@ -64,6 +62,23 @@ export default function Products() {
             console.log(err);
         }
     }
+
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
+    const filteredProducts = products.filter((product) => {
+
+        const query = searchTerm.toLowerCase();
+
+        return (
+            product.name.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query)
+        )
+
+    }
+    )
 
     return (
         <DashboardLayout>
@@ -87,8 +102,8 @@ export default function Products() {
                     <button
                         className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl transition"
                         onClick={() => {
-                            setIsModalOpen(true),
-                            setSelectedProduct(null)
+                            setIsModalOpen(true);
+                            setSelectedProduct(null);
                         }}
                     >
                         Add Product
@@ -96,6 +111,16 @@ export default function Products() {
 
                     
 
+                </div>
+
+                <div className="mt-8 mb-6">
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full max-w-sm border border-slate-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                 </div>
 
                 {loading ? (
@@ -115,7 +140,7 @@ export default function Products() {
                             "Actions",
                         ]}
                     >
-                        {products.length === 0 ? (
+                        {filteredProducts.length === 0 ? (
 
                             <tr>
 
@@ -130,7 +155,7 @@ export default function Products() {
 
                         ) : (
 
-                            products.map((product) => (
+                            filteredProducts.map((product) => (
 
                                 <tr
                                     key={product._id}
@@ -160,7 +185,7 @@ export default function Products() {
                                             <button 
                                                 className="text-blue-600 hover:text-blue-700"
                                                 onClick={() => {
-                                                    setSelectedProduct(product),
+                                                    setSelectedProduct(product);
                                                     setIsModalOpen(true);
                                                 }}
                                             >
@@ -170,7 +195,7 @@ export default function Products() {
                                             <button 
                                                 className="text-red-600 hover:text-red-700"
                                                 onClick={() => {
-                                                    setSelectedProduct(product),
+                                                    setSelectedProduct(product);
                                                     setIsDeleteModalOpen(true);
                                                 }}
                                             >

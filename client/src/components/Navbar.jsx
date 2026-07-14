@@ -25,7 +25,7 @@ export default function Navbar() {
 
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Type to Search..."
             className="bg-transparent outline-none text-sm w-64"
           />
 
