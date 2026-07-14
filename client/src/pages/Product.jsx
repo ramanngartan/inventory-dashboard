@@ -20,6 +20,7 @@ export default function Products() {
     const [selectedProduct, setSelectedProduct] = useState(null);
 
     const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("All")
 
 
     async function fetchProducts() {
@@ -72,13 +73,22 @@ export default function Products() {
 
         const query = searchTerm.toLowerCase();
 
-        return (
+        const matchesSearch =
             product.name.toLowerCase().includes(query) ||
-            product.category.toLowerCase().includes(query)
-        )
+            product.category.toLowerCase().includes(query);
 
-    }
-    )
+        const matchesCategory =
+            selectedCategory === "All" ||
+            product.category === selectedCategory;
+
+        return matchesSearch && matchesCategory;
+
+    });
+
+    const categories = [
+        "All",
+        ...new Set(products.map((product) => product.category)),
+    ];
 
     return (
         <DashboardLayout>
@@ -113,7 +123,8 @@ export default function Products() {
 
                 </div>
 
-                <div className="mt-8 mb-6">
+                <div className="mt-8 mb-6 flex gap-4">
+
                     <input
                         type="text"
                         placeholder="Search products..."
@@ -121,7 +132,28 @@ export default function Products() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full max-w-sm border border-slate-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
                     />
+
+                    <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="border border-slate-300 rounded-xl px-4 py-3 bg-white outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+
+                        {categories.map((category) => (
+
+                            <option
+                                key={category}
+                                value={category}
+                            >
+                                {category}
+                            </option>
+
+                        ))}
+
+                    </select>
+
                 </div>
+
 
                 {loading ? (
 
