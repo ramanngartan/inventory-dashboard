@@ -1,3 +1,7 @@
+
+import { useEffect, useState } from "react";
+import api from "../services/api.js";
+
 import DashboardLayout from "../layouts/DashboardLayout.jsx";
 import StatCard from "../components/StatCard.jsx";
 
@@ -9,6 +13,37 @@ import {
 } from "lucide-react";
 
 const Dashboard = () => {
+
+  const [stats, setStats] = useState({
+    totalProducts: 0,
+    totalStock: 0,
+    totalValue: 0,
+    totalCategories: 0,
+  })
+
+  async function fetchStats() {
+
+    try {
+
+      const response = await api.get("/dashboard/stats");
+
+      setStats(response.data);
+
+    }
+
+    catch (err) {
+
+      console.log(err);
+
+    }
+
+  }
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+
   return (
     <DashboardLayout>
       <main className="flex-1 p-10 bg-slate-100">
@@ -29,31 +64,31 @@ const Dashboard = () => {
 
             <StatCard
               title="Products"
-              value="128"
+              value={stats.totalProducts}
               icon={Package}
               color="bg-blue-100"
               iconColor="text-blue-600"
             />
 
             <StatCard
-              title="Users"
-              value="24"
+              title="Categories"
+              value={stats.totalCategories}
               icon={Users}
               color="bg-green-100"
               iconColor="text-green-600"
             />
 
             <StatCard
-              title="Revenue"
-              value="$12.5K"
+              title="Value"
+              value={`$${stats.totalValue.toLocaleString()}`}
               icon={DollarSign}
               color="bg-purple-100"
               iconColor="text-purple-600"
             />
 
             <StatCard
-              title="Orders"
-              value="54"
+              title="Stock"
+              value={stats.totalStock}
               icon={ShoppingCart}
               color="bg-orange-100"
               iconColor="text-orange-600"
