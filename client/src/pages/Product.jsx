@@ -24,6 +24,9 @@ export default function Products() {
 
     const [sortBy, setSortBy] = useState("newest");
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const productsPerPage = 5;
+
 
     async function fetchProducts() {
 
@@ -139,6 +142,36 @@ export default function Products() {
         "All",
         ...new Set(products.map((product) => product.category)),
     ];
+
+
+    //Pagination
+    const indexOfLastProduct = currentPage * productsPerPage;
+
+    const indexOfFirstProduct =
+        indexOfLastProduct - productsPerPage;
+
+    const currentProducts =
+        sortedProducts.slice(
+            indexOfFirstProduct,
+            indexOfLastProduct
+        );
+
+    const totalPages = Math.ceil(
+        sortedProducts.length / productsPerPage
+    );
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, selectedCategory]);
+
+    useEffect(() => {
+
+        if (currentPage > totalPages && totalPages > 0) {
+            setCurrentPage(totalPages);
+        }
+
+    }, [sortedProducts, currentPage, totalPages]);
+
 
     return (
         <DashboardLayout>
@@ -261,7 +294,7 @@ export default function Products() {
 
                         ) : (
 
-                            sortedProducts.map((product) => (
+                            currentProducts.map((product) => (
 
                                 <tr
                                     key={product._id}
@@ -322,7 +355,33 @@ export default function Products() {
 
                     </DataTable>
 
+                    
+
                 )}
+
+                <div className="flex justify-between items-center mt-6">
+
+                    <button
+                        onClick={() => setCurrentPage((prev) => prev - 1)}
+                        disabled={currentPage === 1}
+                        className="px-4 py-2 rounded-lg border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100"
+                    >
+                        Previous
+                    </button>
+
+                    <span className="text-slate-600 font-medium">
+                        Page {currentPage} of {totalPages}
+                    </span>
+
+                    <button
+                        onClick={() => setCurrentPage((prev) => prev + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-4 py-2 rounded-lg border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100"
+                    >
+                        Next
+                    </button>
+
+                </div>
 
                 {isModalOpen && (
                     <ProductModal

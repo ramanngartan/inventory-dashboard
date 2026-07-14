@@ -11,7 +11,7 @@ const DashboardLayout = ({children}) => {
 
                 <Sidebar />
 
-                <div className="flex-1 flex flex-col">
+                <div className="ml-72 flex-1 flex flex-col">
 
                     <Navbar />
 

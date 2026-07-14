@@ -21,7 +21,7 @@ export default function Sidebar() {
     }`;
 
   return (
-    <aside className="w-72 bg-slate-900 text-white flex flex-col justify-between">
+    <aside className="fixed left-0 top-0 h-screen w-72 bg-slate-900 text-white flex flex-col justify-between">
 
       <div>
 
