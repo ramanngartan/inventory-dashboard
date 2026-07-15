@@ -4,6 +4,8 @@ import api from "../services/api.js";
 
 import DashboardLayout from "../layouts/DashboardLayout.jsx";
 import StatCard from "../components/StatCard.jsx";
+import CategoryPieChart from "../components/CategoryPieChart.jsx";
+
 
 import {
   Package,
@@ -19,6 +21,7 @@ const Dashboard = () => {
     totalStock: 0,
     totalValue: 0,
     totalCategories: 0,
+    productsByCategory: [],
   })
 
   async function fetchStats() {
@@ -93,6 +96,24 @@ const Dashboard = () => {
               color="bg-orange-100"
               iconColor="text-orange-600"
             />
+
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+
+            <CategoryPieChart
+                data={stats.productsByCategory}
+            />
+
+            <div className="bg-white rounded-2xl border border-slate-200 shadow p-8 flex items-center justify-center">
+
+                <p className="text-slate-400">
+                    Inventory by Category
+                    <br />
+                    Coming Soon...
+                </p>
+
+            </div>
 
           </div>
 
